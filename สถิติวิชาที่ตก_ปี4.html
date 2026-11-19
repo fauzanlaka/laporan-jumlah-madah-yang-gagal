@@ -488,7 +488,10 @@ function renderAll() { renderTiles(); renderTrend(); renderDist(); renderFinding
 $("meta").textContent = `นักศึกษาทั้งหมด ${rows.length} รายการ จาก 6 คณะ/สาขา × 3 รุ่น · รุ่น 2021 = ปี 4 ในปีการศึกษา 2024, รุ่น 2022 = 2025, รุ่น 2023 = 2026`;
 buildControls();
 renderAll();
-let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { renderTrend(); renderDist(); }, 120); });
+let rz, lastW = $("trendChart").clientWidth;
+const redraw = () => { clearTimeout(rz); rz = setTimeout(() => { const w = $("trendChart").clientWidth; if (w !== lastW) { lastW = w; renderTrend(); renderDist(); } }, 120); };
+if (window.ResizeObserver) new ResizeObserver(redraw).observe(document.querySelector(".wrap"));
+window.addEventListener("resize", redraw);
 window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { renderTrend(); renderDist(); });
 </script>
 </body>
