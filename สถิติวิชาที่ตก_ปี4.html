@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>สถิติวิชาที่ตก ปี 4</title>
+<style>
+:root {
+  color-scheme: light;
+  --page: #f9f9f7;
+  --surface: #fcfcfb;
+  --ink: #0b0b0b;
+  --ink-2: #52514e;
+  --muted: #898781;
+  --grid: #e1e0d9;
+  --axis: #c3c2b7;
+  --border: rgba(11,11,11,0.10);
+  --wash: rgba(11,11,11,0.04);
+  --good: #006300;
+  --bad: #d03b3b;
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --s5: #e87ba4; --s6: #008300;
+  --all: #52514e;
+  --b0: #86b6ef; --b1: #5598e7; --b2: #2a78d6; --b3: #1c5cab; --b4: #0d366b;
+  --b0-ink: #0b0b0b; --b1-ink: #0b0b0b; --b2-ink: #ffffff; --b3-ink: #ffffff; --b4-ink: #ffffff;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10); --wash: rgba(255,255,255,0.05);
+    --good: #0ca30c; --bad: #e66767;
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181; --s6: #0ca30c;
+    --all: #c3c2b7;
+    --b0: #184f95; --b1: #256abf; --b2: #3987e5; --b3: #6da7ec; --b4: #b7d3f6;
+    --b0-ink: #ffffff; --b1-ink: #ffffff; --b2-ink: #ffffff; --b3-ink: #0b0b0b; --b4-ink: #0b0b0b;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
+  --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10); --wash: rgba(255,255,255,0.05);
+  --good: #0ca30c; --bad: #e66767;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181; --s6: #0ca30c;
+  --all: #c3c2b7;
+  --b0: #184f95; --b1: #256abf; --b2: #3987e5; --b3: #6da7ec; --b4: #b7d3f6;
+  --b0-ink: #ffffff; --b1-ink: #ffffff; --b2-ink: #ffffff; --b3-ink: #0b0b0b; --b4-ink: #0b0b0b;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--page); color: var(--ink);
+  font: 15px/1.55 system-ui, -apple-system, "Sukhumvit Set", "Noto Sans Thai", "Segoe UI", sans-serif;
+}
+.wrap { max-width: 1120px; margin: 0 auto; padding: 32px 16px 64px; }
+header h1 { font-size: 26px; line-height: 1.3; margin: 0 0 6px; font-weight: 650; }
+header p { margin: 0; color: var(--ink-2); max-width: 760px; }
+.meta { margin-top: 10px; font-size: 13px; color: var(--muted); }
+.controls { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: end; margin: 28px 0 20px; }
+.ctl { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--ink-2); }
+select {
+  font: inherit; font-size: 14px; color: var(--ink); background: var(--surface);
+  border: 1px solid var(--border); border-radius: 8px; padding: 7px 30px 7px 10px; min-width: 220px; max-width: 100%;
+}
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--surface); }
+.seg button {
+  font: inherit; font-size: 13px; border: 0; background: transparent; color: var(--ink-2);
+  padding: 7px 12px; cursor: pointer; border-right: 1px solid var(--border);
+}
+.seg button:last-child { border-right: 0; }
+.seg button[aria-pressed="true"] { background: var(--wash); color: var(--ink); font-weight: 600; }
+.tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 20px; }
+.tile, .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; }
+.tile { padding: 14px 16px; }
+.tile .lbl { font-size: 13px; color: var(--ink-2); }
+.tile .val { font-size: 28px; font-weight: 600; margin-top: 2px; line-height: 1.2; }
+.tile .val small { font-size: 14px; font-weight: 500; color: var(--ink-2); }
+.tile .dlt { font-size: 13px; margin-top: 4px; color: var(--ink-2); }
+.up-bad { color: var(--bad); } .down-good { color: var(--good); }
+.card { padding: 18px 18px 14px; margin-bottom: 20px; }
+.card h2 { font-size: 17px; margin: 0 0 2px; font-weight: 600; }
+.card .sub { font-size: 13px; color: var(--ink-2); margin: 0 0 12px; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--ink-2); margin: 4px 0 8px; }
+.legend button { font: inherit; color: inherit; background: none; border: 0; padding: 2px 0; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.legend button.dim { opacity: .4; }
+.key-line { width: 16px; height: 2px; border-radius: 1px; display: inline-block; }
+.key-sq { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+.chart { position: relative; width: 100%; }
+.chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.chart text { font-family: inherit; }
+.tip {
+  position: absolute; pointer-events: none; z-index: 5; min-width: 180px; max-width: 280px;
+  background: var(--surface); color: var(--ink); border: 1px solid var(--border); border-radius: 10px;
+  box-shadow: 0 6px 24px rgba(0,0,0,.14); padding: 10px 12px; font-size: 13px; line-height: 1.45; display: none;
+}
+.tip .th { font-weight: 600; margin-bottom: 4px; }
+.tip .row { display: flex; align-items: center; gap: 8px; }
+.tip .row .n { margin-left: auto; font-variant-numeric: tabular-nums; font-weight: 600; padding-left: 12px; }
+.tip .row.dim { color: var(--muted); }
+.findings { margin: 0; padding-left: 20px; color: var(--ink); }
+.findings li { margin: 4px 0; }
+.tbl-wrap { overflow-x: auto; margin: 0 -4px; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+th, td { padding: 7px 8px; text-align: right; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+th:first-child, td:first-child, th.l, td.l { text-align: left; }
+th { font-weight: 600; color: var(--ink-2); font-size: 12.5px; cursor: pointer; user-select: none; }
+th[aria-sort="ascending"]::after { content: " ▲"; font-size: 9px; }
+th[aria-sort="descending"]::after { content: " ▼"; font-size: 9px; }
+td { font-variant-numeric: tabular-nums; }
+tr.grp td { border-top: 1px solid var(--axis); }
+.sw { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; }
+.more { margin-top: 10px; font: inherit; font-size: 13px; color: var(--ink); background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; cursor: pointer; }
+.note { font-size: 12.5px; color: var(--muted); margin-top: 24px; }
+@media (max-width: 760px) {
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  header h1 { font-size: 22px; }
+  .tile .val { font-size: 24px; }
+  select { min-width: 0; width: 100%; }
+  .ctl { width: 100%; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>สถิติจำนวนวิชาที่ตก · นักศึกษาชั้นปีที่ 4</h1>
+    <p>แนวโน้มจำนวนวิชาที่ตก (total gagal) ของนักศึกษาแต่ละรุ่น แยกตามคณะและสาขาวิชา จากรายงานสรุปผลการเรียน ชั้นปีที่ 4 ภาคเรียนที่ 2 ปีการศึกษา 2024–2026</p>
+    <div class="meta" id="meta"></div>
+  </header>
+
+  <div class="controls">
+    <label class="ctl">คณะ / สาขาวิชา
+      <select id="facSel"></select>
+    </label>
+    <div class="ctl">ตัวชี้วัดในกราฟแนวโน้ม
+      <div class="seg" id="metricSeg" role="group" aria-label="ตัวชี้วัด"></div>
+    </div>
+  </div>
+
+  <section class="tiles" id="tiles" aria-label="ตัวเลขสรุป"></section>
+
+  <section class="card">
+    <h2 id="trendTitle">แนวโน้มตามรุ่น</h2>
+    <p class="sub" id="trendSub"></p>
+    <div class="legend" id="trendLegend"></div>
+    <div class="chart" id="trendChart"></div>
+  </section>
+
+  <section class="card">
+    <h2>การกระจายจำนวนวิชาที่ตกต่อคน</h2>
+    <p class="sub">สัดส่วนนักศึกษาในแต่ละช่วงจำนวนวิชาที่ตก (100% = นักศึกษาทั้งรุ่นของคณะ/สาขานั้น)</p>
+    <div class="legend" id="distLegend"></div>
+    <div class="chart" id="distChart"></div>
+  </section>
+
+  <section class="card">
+    <h2>ข้อสังเกต</h2>
+    <ul class="findings" id="findings"></ul>
+  </section>
+
+  <section class="card">
+    <h2>ตารางสรุปตามคณะ/สาขาและรุ่น</h2>
+    <p class="sub">คลิกหัวตารางเพื่อเรียงลำดับ</p>
+    <div class="tbl-wrap"><table id="sumTable"></table></div>
+  </section>
+
+  <section class="card">
+    <h2>รายชื่อนักศึกษาที่มีวิชาตกมากที่สุด</h2>
+    <p class="sub" id="stuSub"></p>
+    <div class="tbl-wrap"><table id="stuTable"></table></div>
+    <button class="more" id="stuMore" type="button"></button>
+  </section>
+
+  <p class="note">ที่มา: ไฟล์ PDF “ลาฟูรัน กสิมปุลัน ฮาซิล กลูต” จาก kisda.online/ScoreReport จำนวน 18 ไฟล์ (ชั้น 4 ห้อง 1 ของทุกคณะ/สาขา ภาคเรียน 2/2024, 2/2025, 2/2026) · พิมพ์เมื่อ 19/11/2026 · “วิชาที่ตก” = คอลัมน์ تيدق لولوس (total gagal) · “dur” = คอลัมน์ دور (total dur) ตามรายงาน · รุ่นระบุจากปีที่เข้าเรียนของนักศึกษาส่วนใหญ่ (สองหลักแรกของรหัสนักศึกษา)</p>
+</div>
+
+<div class="tip" id="tip" role="tooltip"></div>
+
+<script>
+const RAW = [["Dakwah",2024,"18314894",0,11],["Dakwah",2024,"21515949",0,7],["Dakwah",2024,"21516230",63,26],["Dakwah",2024,"21516231",65,27],["Dakwah",2024,"21516236",0,5],["Dakwah",2024,"21516237",56,2],["Dakwah",2024,"21516239",0,4],["Dakwah",2024,"21516240",29,0],["Dakwah",2024,"21516241",50,2],["Dakwah",2024,"21516242",45,48],["Dakwah",2024,"21516251",71,0],["Dakwah",2024,"21516253",12,0],["Dakwah",2024,"21516254",9,4],["Dakwah",2024,"21516255",0,3],["Dakwah",2024,"21516256",0,0],["Dakwah",2024,"21516257",0,0],["Dakwah",2024,"21516260",8,8],["Dakwah",2024,"21516261",7,0],["Dakwah",2024,"21516262",4,0],["Dakwah",2024,"21516263",6,9],["Dakwah",2024,"21516264",0,0],["Dakwah",2024,"21516265",0,2],["Dakwah",2024,"21516266",8,1],["Dakwah",2024,"21516267",0,5],["Dakwah",2024,"21516269",0,8],["Dakwah",2024,"21516272",31,1],["Dakwah",2024,"21516273",3,1],["Dakwah",2024,"21516276",0,3],["Dakwah",2024,"21516277",10,11],["Dakwah",2024,"21516278",2,2],["Dakwah",2024,"21516279",1,1],["Dakwah",2025,"20515554",0,7],["Dakwah",2025,"22516528",3,16],["Dakwah",2025,"22516540",0,6],["Dakwah",2025,"22516549",6,17],["Dakwah",2025,"22516553",5,16],["Dakwah",2025,"22516580",4,24],["Dakwah",2025,"22516563",2,3],["Dakwah",2025,"22516565",2,4],["Dakwah",2025,"22516566",1,2],["Dakwah",2025,"22516567",4,5],["Dakwah",2025,"22516569",2,5],["Dakwah",2025,"22516570",0,0],["Dakwah",2025,"22516571",1,4],["Dakwah",2025,"22516595",4,14],["Dakwah",2026,"23516880",3,16],["Dakwah",2026,"23516898",6,11],["Dakwah",2026,"23516902",3,3],["Dakwah",2026,"23516916",4,9],["Dakwah",2026,"23516917",2,7],["Dakwah",2026,"23516918",2,6],["Dakwah",2026,"23516919",2,10],["Dakwah",2026,"23516920",5,9],["Dakwah",2026,"23516921",1,2],["Dakwah",2026,"23516922",2,4],["Dakwah",2026,"23516923",2,5],["Dakwah",2026,"23516926",1,2],["Dakwah",2026,"23516957",2,6],["Dakwah",2026,"23516960",4,7],["Dakwah",2026,"23516961",2,10],["Dirasat",2024,"21416197",82,55],["Dirasat",2024,"23416978",0,0],["Dirasat",2024,"23416979",0,1],["Dirasat",2024,"21416203",0,1],["Dirasat",2024,"21416205",0,1],["Dirasat",2024,"21416207",8,9],["Dirasat",2024,"21416209",4,1],["Dirasat",2024,"21416214",11,7],["Dirasat",2024,"21416216",0,1],["Dirasat",2024,"21416217",0,0],["Dirasat",2024,"21416218",0,2],["Dirasat",2024,"21416220",31,40],["Dirasat",2024,"21416225",0,2],["Dirasat",2024,"21416226",0,0],["Dirasat",2024,"21416289",3,2],["Dirasat",2024,"22416593",1,1],["Dirasat",2025,"22416499",0,9],["Dirasat",2025,"22416445",0,1],["Dirasat",2025,"22416504",0,1],["Dirasat",2025,"22416505",5,7],["Dirasat",2025,"22416506",0,0],["Dirasat",2025,"22416508",0,0],["Dirasat",2025,"22416509",0,3],["Dirasat",2025,"22416512",1,4],["Dirasat",2025,"22416513",5,7],["Dirasat",2025,"22416514",0,0],["Dirasat",2025,"22416516",0,8],["Dirasat",2025,"22416518",1,1],["Dirasat",2025,"22416520",5,12],["Dirasat",2025,"22416521",2,3],["Dirasat",2025,"22416523",0,6],["Dirasat",2026,"23416845",0,1],["Dirasat",2026,"23416846",11,20],["Dirasat",2026,"23416848",13,26],["Dirasat",2026,"23416853",12,18],["Dirasat",2026,"23416854",0,0],["Dirasat",2026,"23416864",2,5],["Dirasat",2026,"23416865",17,0],["Dirasat",2026,"23416868",6,14],["Dirasat",2026,"23416964",7,0],["Syariah",2024,"20215739",5,7],["Syariah",2024,"21215995",25,5],["Syariah",2024,"21216005",38,20],["Syariah",2024,"21216006",57,29],["Syariah",2024,"21216007",68,6],["Syariah",2024,"21216008",57,2],["Syariah",2024,"21216009",13,17],["Syariah",2024,"21216013",12,7],["Syariah",2024,"21216014",6,24],["Syariah",2024,"21216015",7,14],["Syariah",2024,"21216019",12,16],["Syariah",2024,"22216572",0,8],["Syariah",2024,"23216977",7,11],["Syariah",2024,"20215759",4,5],["Syariah",2024,"21216022",1,10],["Syariah",2024,"21216023",0,2],["Syariah",2024,"21216026",0,8],["Syariah",2024,"21216030",0,4],["Syariah",2024,"21216031",1,10],["Syariah",2024,"21216035",0,1],["Syariah",2024,"21216036",0,1],["Syariah",2024,"21216037",0,0],["Syariah",2024,"21216039",0,1],["Syariah",2024,"21216040",0,1],["Syariah",2024,"21216042",0,5],["Syariah",2024,"21216043",0,13],["Syariah",2024,"21216044",0,8],["Syariah",2024,"21216046",0,4],["Syariah",2024,"21216047",0,8],["Syariah",2024,"21216048",0,2],["Syariah",2024,"21216049",0,4],["Syariah",2024,"21216053",0,2],["Syariah",2024,"21216055",0,1],["Syariah",2024,"21216057",0,0],["Syariah",2024,"21216060",0,1],["Syariah",2024,"21216061",1,5],["Syariah",2024,"21216062",0,4],["Syariah",2024,"21216064",14,7],["Syariah",2024,"21216065",0,13],["Syariah",2024,"21216066",0,0],["Syariah",2024,"21216070",2,2],["Syariah",2024,"21216071",0,8],["Syariah",2024,"21216072",10,7],["Syariah",2024,"21216073",0,2],["Syariah",2024,"21216075",3,7],["Syariah",2024,"21216077",9,6],["Syariah",2024,"21216078",0,1],["Syariah",2024,"21216079",0,4],["Syariah",2024,"21216080",0,0],["Syariah",2024,"21216082",0,3],["Syariah",2024,"21216083",2,1],["Syariah",2024,"21216084",0,0],["Syariah",2024,"21216085",3,0],["Syariah",2024,"21216086",1,3],["Syariah",2024,"21216087",2,8],["Syariah",2024,"21216088",0,2],["Syariah",2024,"21216089",0,1],["Syariah",2024,"21216090",0,3],["Syariah",2024,"21216092",0,1],["Syariah",2024,"24217098",6,10],["Syariah",2024,"24217106",0,0],["Syariah",2024,"24217114",0,0],["Syariah",2024,"24217116",0,5],["Syariah",2024,"24217118",0,0],["Syariah",2024,"24217123",0,3],["Syariah",2024,"24217263",0,0],["Syariah",2025,"22216409",33,37],["Syariah",2025,"22216410",30,39],["Syariah",2025,"22216414",29,19],["Syariah",2025,"22116312",0,1],["Syariah",2025,"22216398",4,10],["Syariah",2025,"22216416",10,12],["Syariah",2025,"22216417",0,3],["Syariah",2025,"22216418",0,3],["Syariah",2025,"22216419",0,9],["Syariah",2025,"22216421",1,2],["Syariah",2025,"22216422",0,2],["Syariah",2025,"22216423",0,8],["Syariah",2025,"22216424",0,1],["Syariah",2025,"22216425",0,1],["Syariah",2025,"22216426",0,0],["Syariah",2025,"22216427",1,5],["Syariah",2025,"22216429",4,17],["Syariah",2025,"22216432",3,7],["Syariah",2025,"22216433",0,5],["Syariah",2025,"22216435",0,2],["Syariah",2025,"22216436",0,8],["Syariah",2025,"22216437",0,15],["Syariah",2025,"22216441",0,2],["Syariah",2025,"22216444",0,1],["Syariah",2025,"22216446",0,2],["Syariah",2025,"22216447",0,1],["Syariah",2025,"22216448",0,2],["Syariah",2025,"22216449",0,3],["Syariah",2025,"22216451",0,3],["Syariah",2025,"22216452",0,2],["Syariah",2025,"22216453",0,10],["Syariah",2025,"22216454",0,2],["Syariah",2025,"23216983",0,3],["Syariah",2025,"25217584",0,0],["Syariah",2026,"23216734",6,8],["Syariah",2026,"23216737",7,17],["Syariah",2026,"23216743",0,2],["Syariah",2026,"23216746",12,18],["Syariah",2026,"23216747",13,19],["Syariah",2026,"23216752",7,9],["Syariah",2026,"22126382",5,17],["Syariah",2026,"23216756",0,5],["Syariah",2026,"23216757",0,6],["Syariah",2026,"23216759",2,7],["Syariah",2026,"23216761",0,4],["Syariah",2026,"23216762",7,18],["Syariah",2026,"23216763",0,2],["Syariah",2026,"23216764",0,1],["Syariah",2026,"23216765",2,10],["Syariah",2026,"23216766",4,9],["Syariah",2026,"23216767",1,6],["Syariah",2026,"23216768",0,2],["Syariah",2026,"23216769",8,13],["Syariah",2026,"23216770",7,12],["Syariah",2026,"23216771",5,11],["Syariah",2026,"23216772",1,2],["Syariah",2026,"23216773",0,3],["Syariah",2026,"23216774",0,1],["Syariah",2026,"23216775",1,3],["Syariah",2026,"23216781",4,14],["Syariah",2026,"23216785",1,4],["Syariah",2026,"23216786",16,19],["Syariah",2026,"23216789",0,3],["Syariah",2026,"23216790",1,3],["Syariah",2026,"23216791",0,2],["Syariah",2026,"26217716",0,0],["Syariah",2026,"26217719",0,0],["Syariah",2026,"26217720",4,4],["Syariah",2026,"26217731",1,1],["Syariah",2026,"26217741",0,0],["Tarbiah_PAI",2024,"21115856",31,21],["Tarbiah_PAI",2024,"21115862",41,12],["Tarbiah_PAI",2024,"21115863",46,4],["Tarbiah_PAI",2024,"21115868",0,9],["Tarbiah_PAI",2024,"21115869",42,0],["Tarbiah_PAI",2024,"21115876",0,7],["Tarbiah_PAI",2024,"21115877",0,28],["Tarbiah_PAI",2024,"21115879",22,19],["Tarbiah_PAI",2024,"21115882",8,8],["Tarbiah_PAI",2024,"20125349",8,6],["Tarbiah_PAI",2024,"21115883",7,5],["Tarbiah_PAI",2024,"21115884",2,0],["Tarbiah_PAI",2024,"21115885",1,0],["Tarbiah_PAI",2024,"21115888",2,0],["Tarbiah_PAI",2024,"21115889",3,1],["Tarbiah_PAI",2024,"21115890",13,1],["Tarbiah_PAI",2024,"21115892",3,0],["Tarbiah_PAI",2024,"21115896",1,0],["Tarbiah_PAI",2024,"21115899",2,1],["Tarbiah_PAI",2024,"21115901",1,0],["Tarbiah_PAI",2024,"21115905",1,0],["Tarbiah_PAI",2024,"21115908",1,1],["Tarbiah_PAI",2024,"21115913",1,1],["Tarbiah_PAI",2024,"21115918",2,1],["Tarbiah_PAI",2024,"21115920",2,1],["Tarbiah_PAI",2024,"21115921",11,13],["Tarbiah_PAI",2024,"21115922",15,15],["Tarbiah_PAI",2024,"21115923",8,5],["Tarbiah_PAI",2024,"21115925",16,0],["Tarbiah_PAI",2024,"21115927",8,7],["Tarbiah_PAI",2024,"21115931",3,1],["Tarbiah_PAI",2024,"21115934",1,0],["Tarbiah_PAI",2024,"21115936",3,1],["Tarbiah_PAI",2024,"21115937",1,2],["Tarbiah_PAI",2024,"21115939",12,2],["Tarbiah_PAI",2024,"21115940",1,0],["Tarbiah_PAI",2024,"21115943",1,1],["Tarbiah_PAI",2024,"21115946",1,0],["Tarbiah_PAI",2024,"21115947",4,2],["Tarbiah_PAI",2024,"21115982",1,0],["Tarbiah_PAI",2024,"21116145",4,3],["Tarbiah_PAI",2024,"22116293",7,3],["Tarbiah_PAI",2025,"22116297",5,24],["Tarbiah_PAI",2025,"22116299",0,37],["Tarbiah_PAI",2025,"22116302",8,27],["Tarbiah_PAI",2025,"22116303",0,6],["Tarbiah_PAI",2025,"21115897",0,4],["Tarbiah_PAI",2025,"21115961",1,4],["Tarbiah_PAI",2025,"22116305",0,7],["Tarbiah_PAI",2025,"22116306",0,2],["Tarbiah_PAI",2025,"22116307",0,0],["Tarbiah_PAI",2025,"22116308",0,8],["Tarbiah_PAI",2025,"22116310",0,0],["Tarbiah_PAI",2025,"22116313",0,0],["Tarbiah_PAI",2025,"22116315",0,12],["Tarbiah_PAI",2025,"22116316",0,6],["Tarbiah_PAI",2025,"22116318",0,7],["Tarbiah_PAI",2025,"22116319",6,8],["Tarbiah_PAI",2025,"22116320",0,4],["Tarbiah_PAI",2025,"22116324",0,2],["Tarbiah_PAI",2025,"22116326",0,4],["Tarbiah_PAI",2025,"22116327",0,3],["Tarbiah_PAI",2025,"22116328",0,6],["Tarbiah_PAI",2025,"22116332",4,9],["Tarbiah_PAI",2025,"22116335",0,1],["Tarbiah_PAI",2025,"22116336",0,0],["Tarbiah_PAI",2025,"22116338",0,0],["Tarbiah_PAI",2025,"22116339",5,2],["Tarbiah_PAI",2025,"22116493",0,1],["Tarbiah_PAI",2025,"22116522",5,5],["Tarbiah_PAI",2025,"22116576",0,3],["Tarbiah_PAI",2025,"22116586",0,3],["Tarbiah_PAI",2025,"25117320",2,1],["Tarbiah_PAI",2025,"25117337",1,1],["Tarbiah_PAI",2025,"25117582",0,1],["Tarbiah_PAI",2026,"21115867",1,18],["Tarbiah_PAI",2026,"21115877",0,28],["Tarbiah_PAI",2026,"23116604",1,4],["Tarbiah_PAI",2026,"23116606",1,14],["Tarbiah_PAI",2026,"23116609",1,19],["Tarbiah_PAI",2026,"23116613",1,11],["Tarbiah_PAI",2026,"23116616",0,9],["Tarbiah_PAI",2026,"23116620",1,13],["Tarbiah_PAI",2026,"23116623",0,2],["Tarbiah_PAI",2026,"23116625",0,4],["Tarbiah_PAI",2026,"23116626",1,7],["Tarbiah_PAI",2026,"23116628",0,0],["Tarbiah_PAI",2026,"23116629",0,2],["Tarbiah_PAI",2026,"23116630",1,6],["Tarbiah_PAI",2026,"23116631",0,0],["Tarbiah_PAI",2026,"23116632",0,3],["Tarbiah_PAI",2026,"23116633",0,0],["Tarbiah_PAI",2026,"23116636",0,1],["Tarbiah_PAI",2026,"23116637",5,0],["Tarbiah_PAI",2026,"23116638",1,3],["Tarbiah_PAI",2026,"23116640",1,8],["Tarbiah_PAI",2026,"23116641",2,5],["Tarbiah_PAI",2026,"23116644",1,5],["Tarbiah_PAI",2026,"23116645",0,1],["Tarbiah_PAI",2026,"23116649",1,2],["Tarbiah_PAI",2026,"23116650",0,0],["Tarbiah_PAI",2026,"23116652",0,0],["Tarbiah_PAI",2026,"23116655",1,6],["Tarbiah_PAI",2026,"23116656",1,12],["Tarbiah_PAI",2026,"23116660",0,0],["Tarbiah_PAI",2026,"23116661",1,18],["Tarbiah_PAI",2026,"23116662",0,2],["Tarbiah_PAI",2026,"23116665",1,7],["Tarbiah_PAI",2026,"23116666",1,10],["Tarbiah_PAI",2026,"23116667",1,6],["Tarbiah_PAI",2026,"23116668",0,0],["Tarbiah_PAI",2026,"23116671",1,6],["Tarbiah_PAI",2026,"23116696",0,6],["Tarbiah_PAI",2026,"23116949",0,9],["Tarbiah_PAI",2026,"23416956",8,5],["Tarbiah_PBSM",2024,"21125951",7,9],["Tarbiah_PBSM",2024,"21125955",13,14],["Tarbiah_PBSM",2024,"21126199",8,4],["Tarbiah_PBSM",2024,"20215823",7,8],["Tarbiah_PBSM",2024,"21125887",8,1],["Tarbiah_PBSM",2024,"21125907",7,6],["Tarbiah_PBSM",2024,"21125965",5,4],["Tarbiah_PBSM",2024,"21125968",0,3],["Tarbiah_PBSM",2024,"21125971",8,10],["Tarbiah_PBSM",2024,"21125974",3,3],["Tarbiah_PBSM",2024,"21125977",0,0],["Tarbiah_PBSM",2024,"21125979",10,9],["Tarbiah_PBSM",2024,"21125980",3,2],["Tarbiah_PBSM",2024,"21125981",0,5],["Tarbiah_PBSM",2024,"21125983",0,0],["Tarbiah_PBSM",2024,"21125984",0,0],["Tarbiah_PBSM",2024,"21125985",0,0],["Tarbiah_PBSM",2024,"21125991",7,7],["Tarbiah_PBSM",2024,"21125992",0,0],["Tarbiah_PBSM",2025,"22126361",5,24],["Tarbiah_PBSM",2025,"22126362",6,13],["Tarbiah_PBSM",2025,"22126363",4,28],["Tarbiah_PBSM",2025,"22126367",4,12],["Tarbiah_PBSM",2025,"22126368",5,16],["Tarbiah_PBSM",2025,"22126577",3,14],["Tarbiah_PBSM",2025,"22126371",5,17],["Tarbiah_PBSM",2025,"22126372",2,9],["Tarbiah_PBSM",2025,"22126375",0,2],["Tarbiah_PBSM",2025,"22126376",2,6],["Tarbiah_PBSM",2025,"22126383",9,15],["Tarbiah_PBSM",2025,"22126386",5,7],["Tarbiah_PBSM",2025,"22126387",5,7],["Tarbiah_PBSM",2025,"22126388",5,9],["Tarbiah_PBSM",2025,"22126391",5,9],["Tarbiah_PBSM",2025,"22126392",4,6],["Tarbiah_PBSM",2025,"22126396",2,5],["Tarbiah_PBSM",2025,"22126397",3,5],["Tarbiah_PBSM",2025,"22126402",5,11],["Tarbiah_PBSM",2025,"22126405",5,7],["Tarbiah_PBSM",2025,"22126597",5,4],["Tarbiah_PBSM",2025,"22126598",5,4],["Tarbiah_PBSM",2025,"22126599",4,3],["Tarbiah_PBSM",2025,"22126600",0,2],["Tarbiah_PBSM",2026,"23116673",0,1],["Tarbiah_PBSM",2026,"23126698",3,4],["Tarbiah_PBSM",2026,"23126699",1,3],["Tarbiah_PBSM",2026,"23126700",3,4],["Tarbiah_PBSM",2026,"23126701",0,2],["Tarbiah_PBSM",2026,"23126702",3,4],["Tarbiah_PBSM",2026,"23126703",4,4],["Tarbiah_PBSM",2026,"23126707",0,0],["Tarbiah_PBSM",2026,"23126709",2,5],["Tarbiah_PBSM",2026,"23126713",3,5],["Tarbiah_PBSM",2026,"23126716",2,4],["Tarbiah_PBSM",2026,"23126718",2,5],["Tarbiah_PBSM",2026,"23126719",2,5],["Tarbiah_PBSM",2026,"23126721",2,4],["Tarbiah_PBSM",2026,"23126722",2,4],["Tarbiah_PBSM",2026,"23126723",2,4],["Tarbiah_PBSM",2026,"23126727",3,9],["Tarbiah_PBSM",2026,"23126730",10,9],["Tarbiah_PBSM",2026,"23126732",5,4],["Usuluddin",2024,"21315859",70,0],["Usuluddin",2024,"21316097",0,21],["Usuluddin",2024,"21316100",14,44],["Usuluddin",2024,"21316102",10,27],["Usuluddin",2024,"21316110",0,55],["Usuluddin",2024,"21316115",0,0],["Usuluddin",2024,"21316117",5,5],["Usuluddin",2024,"21316120",0,16],["Usuluddin",2024,"21316121",3,11],["Usuluddin",2024,"21316123",0,1],["Usuluddin",2024,"21316127",23,25],["Usuluddin",2024,"21316128",23,25],["Usuluddin",2024,"21316129",0,13],["Usuluddin",2024,"21316130",0,0],["Usuluddin",2024,"21316132",0,0],["Usuluddin",2024,"21316133",34,0],["Usuluddin",2024,"21316135",8,1],["Usuluddin",2024,"21316140",22,25],["Usuluddin",2024,"21316142",0,2],["Usuluddin",2024,"21316147",1,7],["Usuluddin",2024,"21316148",2,31],["Usuluddin",2024,"21316149",3,2],["Usuluddin",2024,"21316152",0,1],["Usuluddin",2024,"21316154",0,6],["Usuluddin",2024,"21316158",0,5],["Usuluddin",2024,"21316163",4,3],["Usuluddin",2024,"21316164",0,0],["Usuluddin",2024,"21316165",0,10],["Usuluddin",2024,"21316166",0,6],["Usuluddin",2024,"21316168",0,5],["Usuluddin",2024,"21316172",5,18],["Usuluddin",2024,"21316174",8,28],["Usuluddin",2024,"21316175",2,14],["Usuluddin",2024,"21316178",0,7],["Usuluddin",2024,"21316179",3,1],["Usuluddin",2024,"21316180",0,4],["Usuluddin",2024,"21316181",0,1],["Usuluddin",2024,"21316187",0,0],["Usuluddin",2024,"21316188",1,8],["Usuluddin",2024,"21316191",0,1],["Usuluddin",2024,"21316192",21,1],["Usuluddin",2025,"22316401",4,35],["Usuluddin",2025,"22316467",0,5],["Usuluddin",2025,"22316472",4,22],["Usuluddin",2025,"22316473",0,1],["Usuluddin",2025,"22316476",1,4],["Usuluddin",2025,"22316478",0,12],["Usuluddin",2025,"22316479",0,7],["Usuluddin",2025,"22316480",4,18],["Usuluddin",2025,"22316481",1,6],["Usuluddin",2025,"22316483",18,17],["Usuluddin",2025,"22316484",2,9],["Usuluddin",2025,"22316485",4,7],["Usuluddin",2025,"22316486",0,1],["Usuluddin",2025,"22316488",0,2],["Usuluddin",2025,"22316490",1,3],["Usuluddin",2025,"22316494",0,0],["Usuluddin",2025,"22316495",1,1],["Usuluddin",2025,"22316497",1,11],["Usuluddin",2025,"22316579",0,3],["Usuluddin",2025,"22316584",2,18],["Usuluddin",2026,"23316799",22,30],["Usuluddin",2026,"25317572",2,3],["Usuluddin",2026,"23316804",5,15],["Usuluddin",2026,"23316805",2,7],["Usuluddin",2026,"23316806",4,10],["Usuluddin",2026,"23316807",1,5],["Usuluddin",2026,"23316809",0,7],["Usuluddin",2026,"23316810",2,2],["Usuluddin",2026,"23316812",9,12],["Usuluddin",2026,"23316814",6,7],["Usuluddin",2026,"23316816",6,8],["Usuluddin",2026,"23316817",2,3],["Usuluddin",2026,"23316818",15,8],["Usuluddin",2026,"23316819",3,10],["Usuluddin",2026,"23316821",8,14],["Usuluddin",2026,"23316824",5,14],["Usuluddin",2026,"23316826",12,18],["Usuluddin",2026,"23316827",2,10],["Usuluddin",2026,"23316829",1,8],["Usuluddin",2026,"23316830",1,6],["Usuluddin",2026,"23316831",1,6],["Usuluddin",2026,"23316833",1,5],["Usuluddin",2026,"23316834",5,17],["Usuluddin",2026,"23316836",1,5],["Usuluddin",2026,"23316837",1,7],["Usuluddin",2026,"23316838",1,6],["Usuluddin",2026,"23316839",1,4],["Usuluddin",2026,"23316841",30,10],["Usuluddin",2026,"23316967",1,4]];
+
+const FACS = [
+  { key: "Tarbiah_PAI",  short: "Tarbiah · PAI",  name: "Tarbiah Islamiah · Pendidikan agama islam", color: "--s1" },
+  { key: "Tarbiah_PBSM", short: "Tarbiah · PBSM", name: "Tarbiah Islamiah · Pendidikan bahasa dan sastera melayu", color: "--s2" },
+  { key: "Syariah",      short: "Syariah",        name: "Syariah Islamiah", color: "--s3" },
+  { key: "Usuluddin",    short: "Usuluddin",      name: "Usuluddin", color: "--s4" },
+  { key: "Dirasat",      short: "Dirasat",        name: "Dirasat Islamiah wa al-arabiah", color: "--s5" },
+  { key: "Dakwah",       short: "Dakwah",         name: "Dakwah (Pengurusan Dakwah)", color: "--s6" },
+];
+const ALL = { key: "ALL", short: "รวมทุกคณะ", name: "รวมทุกคณะ/สาขา", color: "--all" };
+const FAC_BY = Object.fromEntries([...FACS, ALL].map(f => [f.key, f]));
+const YEARS = [2024, 2025, 2026];
+const COHORT = { 2024: 2021, 2025: 2022, 2026: 2023 };
+const yLabel = y => `รุ่น ${COHORT[y]}`;
+const ySub = y => `ปี 4 เทอม 2/${y}`;
+const BUCKETS = [
+  { lo: 0,  hi: 0,   label: "ไม่มีวิชาตก" },
+  { lo: 1,  hi: 2,   label: "1–2 วิชา" },
+  { lo: 3,  hi: 5,   label: "3–5 วิชา" },
+  { lo: 6,  hi: 15,  label: "6–15 วิชา" },
+  { lo: 16, hi: 1e9, label: "16 วิชาขึ้นไป" },
+];
+const METRICS = [
+  { key: "avg",    label: "เฉลี่ยต่อคน", title: "จำนวนวิชาที่ตกเฉลี่ยต่อคน", unit: "วิชา/คน", fmt: v => v.toFixed(2) },
+  { key: "median", label: "ค่ามัธยฐาน", title: "ค่ามัธยฐานจำนวนวิชาที่ตกต่อคน", unit: "วิชา", fmt: v => (Math.round(v * 10) / 10).toString() },
+  { key: "pct",    label: "% ที่มีวิชาตก", title: "สัดส่วนนักศึกษาที่ตกอย่างน้อย 1 วิชา", unit: "%", fmt: v => v.toFixed(1) + "%" },
+  { key: "total",  label: "รวมทั้งรุ่น", title: "จำนวนวิชาที่ตกรวมทั้งรุ่น", unit: "วิชา", fmt: v => v.toLocaleString() },
+  { key: "durAvg", label: "dur เฉลี่ย", title: "dur (دور) เฉลี่ยต่อคน", unit: "ต่อคน", fmt: v => v.toFixed(2) },
+];
+
+const rows = RAW.map(([fac, year, id, gagal, dur]) => ({ fac, year, id, gagal, dur }));
+
+function median(a) {
+  if (!a.length) return 0;
+  const s = [...a].sort((x, y) => x - y), m = s.length >> 1;
+  return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
+}
+function stats(list) {
+  const g = list.map(r => r.gagal), d = list.map(r => r.dur), n = list.length;
+  const total = g.reduce((a, b) => a + b, 0), durTotal = d.reduce((a, b) => a + b, 0);
+  return {
+    n, total, durTotal,
+    avg: n ? total / n : 0,
+    median: median(g),
+    pct: n ? 100 * g.filter(v => v > 0).length / n : 0,
+    failN: g.filter(v => v > 0).length,
+    max: n ? Math.max(...g) : 0,
+    durAvg: n ? durTotal / n : 0,
+    buckets: BUCKETS.map(b => g.filter(v => v >= b.lo && v <= b.hi).length),
+  };
+}
+const S = {};
+for (const f of [...FACS, ALL]) {
+  S[f.key] = {};
+  for (const y of YEARS) S[f.key][y] = stats(rows.filter(r => r.year === y && (f.key === "ALL" || r.fac === f.key)));
+}
+
+const state = { fac: "ALL", metric: "avg", hidden: new Set(), stuAll: false };
+try { const m = localStorage.getItem("fail-metric"); if (METRICS.some(x => x.key === m)) state.metric = m; } catch (e) {}
+
+const $ = id => document.getElementById(id);
+const cssv = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+const NS = "http://www.w3.org/2000/svg";
+function el(tag, attrs = {}, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function niceMax(v) {
+  if (v <= 0) return 1;
+  const p = Math.pow(10, Math.floor(Math.log10(v))), n = v / p;
+  const step = n <= 1 ? 1 : n <= 2 ? 2 : n <= 2.5 ? 2.5 : n <= 5 ? 5 : 10;
+  return step * p;
+}
+function ticks(max) {
+  const raw = max / 4, p = Math.pow(10, Math.floor(Math.log10(raw))), n = raw / p;
+  const step = (n <= 1 ? 1 : n <= 2 ? 2 : n <= 2.5 ? 2.5 : n <= 5 ? 5 : 10) * p;
+  const out = []; for (let v = 0; v <= max + 1e-9; v += step) out.push(+v.toFixed(6)); return out;
+}
+
+/* ---------- tooltip ---------- */
+const tip = $("tip");
+function showTip(html, evt, host) {
+  tip.innerHTML = html; tip.style.display = "block";
+  const hb = host.getBoundingClientRect();
+  const tw = tip.offsetWidth, th = tip.offsetHeight;
+  let x = evt.clientX + 14, y = evt.clientY + 14;
+  if (x + tw > window.innerWidth - 8) x = evt.clientX - tw - 14;
+  if (x < 8) x = 8;
+  if (y + th > window.innerHeight - 8) y = evt.clientY - th - 14;
+  tip.style.left = (x + window.scrollX) + "px"; tip.style.top = (y + window.scrollY) + "px";
+}
+function hideTip() { tip.style.display = "none"; }
+
+/* ---------- controls ---------- */
+function buildControls() {
+  const sel = $("facSel");
+  sel.innerHTML = [ALL, ...FACS].map(f => `<option value="${f.key}">${f.name}</option>`).join("");
+  sel.value = state.fac;
+  sel.onchange = () => { state.fac = sel.value; state.stuAll = false; renderAll(); };
+  const seg = $("metricSeg");
+  seg.innerHTML = METRICS.map(m => `<button type="button" data-k="${m.key}" aria-pressed="${m.key === state.metric}">${m.label}</button>`).join("");
+  seg.onclick = e => {
+    const b = e.target.closest("button"); if (!b) return;
+    state.metric = b.dataset.k;
+    try { localStorage.setItem("fail-metric", state.metric); } catch (err) {}
+    seg.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x.dataset.k === state.metric));
+    renderTrend();
+  };
+}
+
+/* ---------- tiles ---------- */
+function renderTiles() {
+  const f = FAC_BY[state.fac], cur = S[f.key][2026], prev = S[f.key][2025];
+  const delta = (a, b, fmt, unit) => {
+    const d = a - b;
+    if (Math.abs(d) < 1e-9) return `เท่ากับรุ่น ${COHORT[2025]}`;
+    const cls = d > 0 ? "up-bad" : "down-good";
+    const arrow = d > 0 ? "▲" : "▼";
+    return `<span class="${cls}">${arrow} ${fmt(Math.abs(d))}${unit}</span> เทียบรุ่น ${COHORT[2025]}`;
+  };
+  const tiles = [
+    { lbl: `นักศึกษา รุ่น ${COHORT[2026]}`, val: cur.n.toLocaleString(), unit: "คน", dlt: `รุ่น ${COHORT[2025]}: ${prev.n} คน · รุ่น ${COHORT[2024]}: ${S[f.key][2024].n} คน` },
+    { lbl: `วิชาที่ตกเฉลี่ยต่อคน รุ่น ${COHORT[2026]}`, val: cur.avg.toFixed(2), unit: "วิชา", dlt: delta(cur.avg, prev.avg, v => v.toFixed(2), "") },
+    { lbl: `มีวิชาตกอย่างน้อย 1 วิชา รุ่น ${COHORT[2026]}`, val: cur.pct.toFixed(1) + "%", unit: `(${cur.failN} คน)`, dlt: delta(cur.pct, prev.pct, v => v.toFixed(1), " จุด") },
+    { lbl: `วิชาที่ตกรวม รุ่น ${COHORT[2026]}`, val: cur.total.toLocaleString(), unit: "วิชา", dlt: delta(cur.total, prev.total, v => v.toLocaleString(), "") },
+  ];
+  $("tiles").innerHTML = tiles.map(t => `<div class="tile"><div class="lbl">${t.lbl}</div><div class="val">${t.val} <small>${t.unit}</small></div><div class="dlt">${t.dlt}</div></div>`).join("");
+}
+
+/* ---------- trend line chart ---------- */
+function seriesList() { return [...FACS, ALL]; }
+function renderTrend() {
+  const m = METRICS.find(x => x.key === state.metric);
+  $("trendTitle").textContent = `แนวโน้ม${m.title}`;
+  $("trendSub").textContent = `แกนนอน = รุ่นนักศึกษา (ปีที่เข้าเรียน) วัดตอนเรียนปี 4 เทอม 2 · คลิกชื่อในคำอธิบายเพื่อซ่อน/แสดงเส้น`;
+  const leg = $("trendLegend");
+  leg.innerHTML = seriesList().map(f => `<button type="button" data-k="${f.key}" class="${state.hidden.has(f.key) ? "dim" : ""}" aria-pressed="${!state.hidden.has(f.key)}"><span class="key-line" style="background:var(${f.color});${f.key === "ALL" ? "height:3px" : ""}"></span>${f.short}</button>`).join("");
+  leg.onclick = e => {
+    const b = e.target.closest("button"); if (!b) return;
+    const k = b.dataset.k; state.hidden.has(k) ? state.hidden.delete(k) : state.hidden.add(k); renderTrend();
+  };
+
+  const host = $("trendChart"); host.innerHTML = "";
+  const W = Math.max(320, host.clientWidth), narrow = W < 560;
+  const H = narrow ? 300 : 340, M = { t: 16, r: narrow ? 20 : 120, b: 48, l: 46 };
+  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": m.title }, host);
+  const vis = seriesList().filter(f => !state.hidden.has(f.key));
+  const vals = vis.flatMap(f => YEARS.map(y => S[f.key][y][m.key]));
+  const yMax = niceMax(Math.max(...vals, 0.001) * 1.08);
+  const iw = W - M.l - M.r, ih = H - M.t - M.b;
+  const xPad = narrow ? 28 : 60;
+  const x = i => M.l + xPad + i * (iw - 2 * xPad) / (YEARS.length - 1);
+  const y = v => M.t + ih - (v / yMax) * ih;
+
+  for (const t of ticks(yMax)) {
+    el("line", { x1: M.l, x2: W - M.r, y1: y(t), y2: y(t), stroke: cssv(t === 0 ? "--axis" : "--grid"), "stroke-width": 1 }, svg);
+    const tx = el("text", { x: M.l - 8, y: y(t) + 4, "text-anchor": "end", "font-size": 12, fill: cssv("--muted") }, svg);
+    tx.textContent = m.key === "pct" ? t + "%" : t.toLocaleString();
+  }
+  YEARS.forEach((yr, i) => {
+    const a = el("text", { x: x(i), y: H - M.b + 20, "text-anchor": "middle", "font-size": 13, fill: cssv("--ink-2"), "font-weight": 600 }, svg); a.textContent = yLabel(yr);
+    const b = el("text", { x: x(i), y: H - M.b + 37, "text-anchor": "middle", "font-size": 11.5, fill: cssv("--muted") }, svg); b.textContent = ySub(yr);
+  });
+
+  const cross = el("line", { y1: M.t, y2: M.t + ih, stroke: cssv("--axis"), "stroke-width": 1, visibility: "hidden" }, svg);
+  const focus = state.fac;
+  const order = [...vis].sort((a, b) => (a.key === focus) - (b.key === focus));
+  for (const f of order) {
+    const dim = focus !== "ALL" && f.key !== focus && f.key !== "ALL";
+    const g = el("g", { opacity: dim ? 0.22 : 1 }, svg);
+    const pts = YEARS.map((yr, i) => [x(i), y(S[f.key][yr][m.key])]);
+    el("polyline", { points: pts.map(p => p.join(",")).join(" "), fill: "none", stroke: cssv(f.color), "stroke-width": f.key === "ALL" ? 3 : 2, "stroke-linejoin": "round", "stroke-linecap": "round" }, g);
+    for (const [px, py] of pts) el("circle", { cx: px, cy: py, r: 4.5, fill: cssv(f.color), stroke: cssv("--surface"), "stroke-width": 2 }, g);
+  }
+  // direct label for the focused series (or "all") at the right end
+  if (!narrow) {
+    const lab = vis.find(f => f.key === focus) || null;
+    const ends = vis.map(f => ({ f, v: S[f.key][2026][m.key] })).sort((a, b) => b.v - a.v);
+    const placed = [];
+    for (const { f, v } of ends) {
+      if (f.key !== focus && f.key !== "ALL") continue;
+      let py = y(v) + 4;
+      for (const p of placed) if (Math.abs(p - py) < 14) py = p + 14;
+      placed.push(py);
+      const t = el("text", { x: x(2) + 12, y: py, "font-size": 12, fill: cssv("--ink-2") }, svg);
+      t.textContent = `${f.short} ${m.fmt(v)}`;
+    }
+  }
+
+  const ov = el("rect", { x: M.l, y: M.t, width: iw, height: ih, fill: "transparent" }, svg);
+  const pick = evt => {
+    const r = svg.getBoundingClientRect(), sx = (evt.clientX - r.left) * W / r.width;
+    let best = 0, bd = 1e9; YEARS.forEach((_, i) => { const d = Math.abs(x(i) - sx); if (d < bd) { bd = d; best = i; } });
+    return best;
+  };
+  const move = evt => {
+    const i = pick(evt), yr = YEARS[i];
+    cross.setAttribute("x1", x(i)); cross.setAttribute("x2", x(i)); cross.setAttribute("visibility", "visible");
+    const list = vis.map(f => ({ f, v: S[f.key][yr][m.key], n: S[f.key][yr].n })).sort((a, b) => b.v - a.v);
+    showTip(`<div class="th">${yLabel(yr)} · ${ySub(yr)}</div><div style="color:var(--muted);margin-bottom:4px">${m.title}</div>` +
+      list.map(({ f, v, n }) => `<div class="row ${focus !== "ALL" && f.key !== focus && f.key !== "ALL" ? "dim" : ""}"><span class="key-line" style="background:var(${f.color})"></span>${f.short} <span style="color:var(--muted)">(${n} คน)</span><span class="n">${m.fmt(v)}</span></div>`).join(""), evt, host);
+  };
+  ov.addEventListener("pointermove", move);
+  ov.addEventListener("pointerdown", move);
+  ov.addEventListener("pointerleave", () => { cross.setAttribute("visibility", "hidden"); hideTip(); });
+}
+
+/* ---------- distribution stacked bars ---------- */
+function renderDist() {
+  $("distLegend").innerHTML = BUCKETS.map((b, i) => `<span style="display:inline-flex;align-items:center;gap:6px"><span class="key-sq" style="background:var(--b${i})"></span>${b.label}</span>`).join("");
+  const host = $("distChart"); host.innerHTML = "";
+  const W = Math.max(320, host.clientWidth), narrow = W < 560;
+  const facs = state.fac === "ALL" ? [...FACS, ALL] : [FAC_BY[state.fac], ALL];
+  const rowH = 22, gapRow = 8, gapGroup = 18, labW = narrow ? 0 : 150, yrW = 74;
+  const groupH = f => (narrow ? 20 : 0) + YEARS.length * rowH + (YEARS.length - 1) * gapRow;
+  const H = facs.reduce((s, f) => s + groupH(f) + gapGroup, 0) + 22;
+  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "การกระจายจำนวนวิชาที่ตก" }, host);
+  const x0 = labW + yrW, bw = W - x0 - 4;
+  let cy = 0;
+  for (const f of facs) {
+    if (narrow) { const t = el("text", { x: 0, y: cy + 14, "font-size": 13, "font-weight": 600, fill: cssv("--ink") }, svg); t.textContent = f.short; cy += 20; }
+    else { const t = el("text", { x: 0, y: cy + rowH * 1.5 + gapRow + 4, "font-size": 13, "font-weight": 600, fill: cssv("--ink") }, svg); t.textContent = f.short; }
+    YEARS.forEach(yr => {
+      const st = S[f.key][yr];
+      const yl = el("text", { x: labW, y: cy + rowH / 2 + 4, "font-size": 12, fill: cssv("--ink-2") }, svg); yl.textContent = `รุ่น ${COHORT[yr]}`;
+      let cx = x0; const usable = bw - 2 * (st.buckets.filter(c => c > 0).length - 1);
+      st.buckets.forEach((c, i) => {
+        if (!c) return;
+        const w = Math.max(1, usable * c / st.n), pct = 100 * c / st.n;
+        const r = el("rect", { x: cx, y: cy, width: w, height: rowH, rx: 4, fill: cssv(`--b${i}`) }, svg);
+        const label = `${Math.round(pct)}%`;
+        if (w > label.length * 7 + 12) {
+          const t = el("text", { x: cx + 6, y: cy + rowH / 2 + 4, "font-size": 11.5, fill: cssv(`--b${i}-ink`), "pointer-events": "none" }, svg); t.textContent = label;
+        }
+        const hit = evt => showTip(`<div class="th">${f.short} · รุ่น ${COHORT[yr]}</div><div style="color:var(--muted);margin-bottom:4px">${ySub(yr)} · ทั้งหมด ${st.n} คน</div>` +
+          BUCKETS.map((b, j) => `<div class="row ${j === i ? "" : "dim"}"><span class="key-sq" style="background:var(--b${j})"></span>${b.label}<span class="n">${st.buckets[j]} คน · ${(100 * st.buckets[j] / st.n).toFixed(1)}%</span></div>`).join(""), evt, host);
+        r.addEventListener("pointermove", hit); r.addEventListener("pointerdown", hit); r.addEventListener("pointerleave", hideTip);
+        cx += w + 2;
+      });
+      cy += rowH + gapRow;
+    });
+    cy += gapGroup - gapRow;
+  }
+  [0, 50, 100].forEach(p => {
+    const t = el("text", { x: x0 + bw * p / 100, y: H - 4, "font-size": 11.5, "text-anchor": p === 0 ? "start" : p === 100 ? "end" : "middle", fill: cssv("--muted") }, svg); t.textContent = p + "%";
+  });
+}
+
+/* ---------- findings ---------- */
+function renderFindings() {
+  const out = [];
+  const a = S.ALL;
+  out.push(`ภาพรวมทุกคณะ: วิชาที่ตกเฉลี่ยต่อคน <b>${a[2024].avg.toFixed(2)}</b> (รุ่น 2021) → <b>${a[2025].avg.toFixed(2)}</b> (รุ่น 2022) → <b>${a[2026].avg.toFixed(2)}</b> (รุ่น 2023) · สัดส่วนผู้ที่มีวิชาตก ${a[2024].pct.toFixed(1)}% → ${a[2025].pct.toFixed(1)}% → ${a[2026].pct.toFixed(1)}%`);
+  const ranked = FACS.map(f => ({ f, v: S[f.key][2026].avg })).sort((p, q) => q.v - p.v);
+  out.push(`รุ่น 2023 (ล่าสุด) ตกเฉลี่ยมากที่สุด: <b>${ranked[0].f.short}</b> ${ranked[0].v.toFixed(2)} วิชา/คน · น้อยที่สุด: <b>${ranked.at(-1).f.short}</b> ${ranked.at(-1).v.toFixed(2)} วิชา/คน`);
+  const ch = FACS.map(f => ({ f, d: S[f.key][2026].avg - S[f.key][2025].avg })).sort((p, q) => q.d - p.d);
+  const ups = ch.filter(c => c.d > 0.005);
+  if (ups.length) out.push(`เพิ่มขึ้นจากรุ่น 2022 → 2023: ${ups.map(c => `<b>${c.f.short}</b> (+${c.d.toFixed(2)})`).join(", ")}`);
+  const downs = ch.filter(c => c.d < -0.005).reverse();
+  if (downs.length) out.push(`ลดลงจากรุ่น 2022 → 2023: ${downs.map(c => `<b>${c.f.short}</b> (${c.d.toFixed(2)})`).join(", ")}`);
+  const pctUp = FACS.map(f => ({ f, d: S[f.key][2026].pct - S[f.key][2025].pct })).sort((p, q) => q.d - p.d)[0];
+  out.push(`สัดส่วนผู้ที่มีวิชาตกเพิ่มขึ้นมากที่สุดในรุ่น 2023: <b>${pctUp.f.short}</b> ${S[pctUp.f.key][2025].pct.toFixed(1)}% → ${S[pctUp.f.key][2026].pct.toFixed(1)}%`);
+  const heavy = y => rows.filter(r => r.year === y && r.gagal >= 16).length;
+  out.push(`นักศึกษาที่ตก 16 วิชาขึ้นไป: รุ่น 2021 ${heavy(2024)} คน · รุ่น 2022 ${heavy(2025)} คน · รุ่น 2023 ${heavy(2026)} คน — ค่าเฉลี่ยถูกดึงขึ้นโดยกลุ่มที่ตกจำนวนมาก ขณะที่ค่ามัธยฐานรวมทุกคณะคือ ${YEARS.map(y => `${a[y].median} (รุ่น ${COHORT[y]})`).join(", ")} วิชา`);
+  $("findings").innerHTML = out.map(s => `<li>${s}</li>`).join("");
+}
+
+/* ---------- tables ---------- */
+function sortable(table, cols, data, rowHtml, init) {
+  let sk = init.key, dir = init.dir;
+  const draw = () => {
+    const sorted = [...data].sort((p, q) => { const a = p[sk], b = q[sk]; return (a < b ? -1 : a > b ? 1 : 0) * dir; });
+    table.innerHTML = `<thead><tr>${cols.map(c => `<th class="${c.l ? "l" : ""}" data-k="${c.k}" aria-sort="${c.k === sk ? (dir > 0 ? "ascending" : "descending") : "none"}">${c.t}</th>`).join("")}</tr></thead><tbody>${sorted.map(rowHtml).join("")}</tbody>`;
+    table.querySelectorAll("th").forEach(th => th.onclick = () => { const k = th.dataset.k; if (k === sk) dir = -dir; else { sk = k; dir = -1; } draw(); });
+  };
+  draw();
+}
+function renderSummary() {
+  const data = [];
+  for (const f of [...FACS, ALL]) for (const y of YEARS) {
+    const s = S[f.key][y];
+    data.push({ fo: f.key === "ALL" ? 99 : FACS.indexOf(f), f, fac: f.short, y, coh: COHORT[y] * 10 + (f.key === "ALL" ? 0 : 0), ...s });
+  }
+  data.forEach(d => d.order = d.fo * 10000 + d.y);
+  const cols = [
+    { k: "order", t: "คณะ/สาขา", l: 1 }, { k: "y", t: "รุ่น (ปี 4 เทอม 2)", l: 1 }, { k: "n", t: "นักศึกษา" },
+    { k: "total", t: "วิชาตกรวม" }, { k: "avg", t: "เฉลี่ย/คน" }, { k: "median", t: "มัธยฐาน" },
+    { k: "pct", t: "% มีวิชาตก" }, { k: "max", t: "สูงสุด" }, { k: "durTotal", t: "dur รวม" }, { k: "durAvg", t: "dur เฉลี่ย" },
+  ];
+  sortable($("sumTable"), cols, data, d => `<tr${d.f.key === "ALL" ? ' style="font-weight:600"' : ""}><td><span class="sw" style="background:var(${d.f.color})"></span>${d.fac}</td><td class="l">${COHORT[d.y]} <span style="color:var(--muted)">(${d.y})</span></td><td>${d.n}</td><td>${d.total.toLocaleString()}</td><td>${d.avg.toFixed(2)}</td><td>${d.median}</td><td>${d.pct.toFixed(1)}%</td><td>${d.max}</td><td>${d.durTotal.toLocaleString()}</td><td>${d.durAvg.toFixed(2)}</td></tr>`, { key: "order", dir: 1 });
+}
+function renderStudents() {
+  const list = rows.filter(r => state.fac === "ALL" || r.fac === state.fac).map(r => ({ ...r, fs: FAC_BY[r.fac].short }));
+  const withFail = list.filter(r => r.gagal > 0).length;
+  $("stuSub").textContent = `${FAC_BY[state.fac].name} · ${list.length} คน (มีวิชาตก ${withFail} คน) · แสดงเฉพาะรหัสนักศึกษา`;
+  const limit = state.stuAll ? list.length : 25;
+  const top = [...list].sort((a, b) => b.gagal - a.gagal || b.dur - a.dur).slice(0, limit);
+  const cols = [{ k: "id", t: "รหัสนักศึกษา", l: 1 }, { k: "fs", t: "คณะ/สาขา", l: 1 }, { k: "year", t: "รุ่น", l: 1 }, { k: "gagal", t: "วิชาที่ตก" }, { k: "dur", t: "dur" }];
+  sortable($("stuTable"), cols, top, r => `<tr><td>${r.id}</td><td class="l"><span class="sw" style="background:var(${FAC_BY[r.fac].color})"></span>${r.fs}</td><td class="l">${COHORT[r.year]} <span style="color:var(--muted)">(${r.year})</span></td><td>${r.gagal}</td><td>${r.dur}</td></tr>`, { key: "gagal", dir: -1 });
+  const btn = $("stuMore");
+  btn.textContent = state.stuAll ? "แสดงเฉพาะ 25 อันดับแรก" : `แสดงทั้งหมด ${list.length} คน`;
+  btn.onclick = () => { state.stuAll = !state.stuAll; renderStudents(); };
+}
+
+function renderAll() { renderTiles(); renderTrend(); renderDist(); renderFindings(); renderSummary(); renderStudents(); }
+
+$("meta").textContent = `นักศึกษาทั้งหมด ${rows.length} รายการ จาก 6 คณะ/สาขา × 3 รุ่น · รุ่น 2021 = ปี 4 ในปีการศึกษา 2024, รุ่น 2022 = 2025, รุ่น 2023 = 2026`;
+buildControls();
+renderAll();
+let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { renderTrend(); renderDist(); }, 120); });
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { renderTrend(); renderDist(); });
+</script>
+</body>
+</html>
