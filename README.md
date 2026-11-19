@@ -23,3 +23,7 @@
 | 2021 | 2/2024 |
 | 2022 | 2/2025 |
 | 2023 | 2/2026 |
+
+## หน้าเว็บ
+
+https://fauzanlaka.github.io/laporan-jumlah-madah-yang-gagal/
