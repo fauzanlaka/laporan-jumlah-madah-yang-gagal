@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="th">
+<html lang="ms">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>สถิติวิชาที่ตก ปี 4</title>
+<title>Statistik Madah Gagal Tahun 4</title>
 <style>
 :root {
   color-scheme: light;
@@ -122,55 +122,55 @@ tr.grp td { border-top: 1px solid var(--axis); }
 <body>
 <div class="wrap">
   <header>
-    <h1>สถิติจำนวนวิชาที่ตก · นักศึกษาชั้นปีที่ 4</h1>
-    <p>แนวโน้มจำนวนวิชาที่ตก (total gagal) ของนักศึกษาแต่ละรุ่น แยกตามคณะและสาขาวิชา จากรายงานสรุปผลการเรียน ชั้นปีที่ 4 ภาคเรียนที่ 2 ปีการศึกษา 2024–2026</p>
+    <h1>Statistik Jumlah Madah Gagal · Mahasiswa Tahun 4</h1>
+    <p>Trend jumlah madah gagal (total gagal) bagi setiap ambilan mahasiswa mengikut fakulti dan program, berdasarkan laporan keputusan Tahun 4 Semester 2 sesi 2024–2026</p>
     <div class="meta" id="meta"></div>
   </header>
 
   <div class="controls">
-    <label class="ctl">คณะ / สาขาวิชา
+    <label class="ctl">Fakulti / Program
       <select id="facSel"></select>
     </label>
-    <div class="ctl">ตัวชี้วัดในกราฟแนวโน้ม
-      <div class="seg" id="metricSeg" role="group" aria-label="ตัวชี้วัด"></div>
+    <div class="ctl">Penunjuk dalam graf trend
+      <div class="seg" id="metricSeg" role="group" aria-label="Penunjuk"></div>
     </div>
   </div>
 
-  <section class="tiles" id="tiles" aria-label="ตัวเลขสรุป"></section>
+  <section class="tiles" id="tiles" aria-label="Ringkasan angka"></section>
 
   <section class="card">
-    <h2 id="trendTitle">แนวโน้มตามรุ่น</h2>
+    <h2 id="trendTitle">Trend mengikut ambilan</h2>
     <p class="sub" id="trendSub"></p>
     <div class="legend" id="trendLegend"></div>
     <div class="chart" id="trendChart"></div>
   </section>
 
   <section class="card">
-    <h2>การกระจายจำนวนวิชาที่ตกต่อคน</h2>
-    <p class="sub">สัดส่วนนักศึกษาในแต่ละช่วงจำนวนวิชาที่ตก (100% = นักศึกษาทั้งรุ่นของคณะ/สาขานั้น)</p>
+    <h2>Taburan jumlah madah gagal bagi setiap mahasiswa</h2>
+    <p class="sub">Peratus mahasiswa dalam setiap julat jumlah madah gagal (100% = semua mahasiswa ambilan itu dalam fakulti/program tersebut)</p>
     <div class="legend" id="distLegend"></div>
     <div class="chart" id="distChart"></div>
   </section>
 
   <section class="card">
-    <h2>ข้อสังเกต</h2>
+    <h2>Pemerhatian</h2>
     <ul class="findings" id="findings"></ul>
   </section>
 
   <section class="card">
-    <h2>ตารางสรุปตามคณะ/สาขาและรุ่น</h2>
-    <p class="sub">คลิกหัวตารางเพื่อเรียงลำดับ</p>
+    <h2>Jadual ringkasan mengikut fakulti/program dan ambilan</h2>
+    <p class="sub">Klik tajuk lajur untuk menyusun</p>
     <div class="tbl-wrap"><table id="sumTable"></table></div>
   </section>
 
   <section class="card">
-    <h2>รายชื่อนักศึกษาที่มีวิชาตกมากที่สุด</h2>
+    <h2>Senarai mahasiswa dengan madah gagal paling banyak</h2>
     <p class="sub" id="stuSub"></p>
     <div class="tbl-wrap"><table id="stuTable"></table></div>
     <button class="more" id="stuMore" type="button"></button>
   </section>
 
-  <p class="note">ที่มา: ไฟล์ PDF “ลาฟูรัน กสิมปุลัน ฮาซิล กลูต” จาก kisda.online/ScoreReport จำนวน 18 ไฟล์ (ชั้น 4 ห้อง 1 ของทุกคณะ/สาขา ภาคเรียน 2/2024, 2/2025, 2/2026) · พิมพ์เมื่อ 19/11/2026 · “วิชาที่ตก” = คอลัมน์ تيدق لولوس (total gagal) · “dur” = คอลัมน์ دور (total dur) ตามรายงาน · รุ่นระบุจากปีที่เข้าเรียนของนักศึกษาส่วนใหญ่ (สองหลักแรกของรหัสนักศึกษา)</p>
+  <p class="note">Sumber: 18 fail PDF “لافوران كسيمفولن حاصل كلوت” daripada kisda.online/ScoreReport (Kelas 4 Bilik 1 bagi semua fakulti/program, semester 2/2024, 2/2025, 2/2026) · dicetak 19/11/2026 · “Madah gagal” = lajur تيدق لولوس (total gagal) · “dur” = lajur دور (total dur) seperti dalam laporan · Ambilan ditentukan daripada tahun masuk kebanyakan mahasiswa (dua digit pertama nombor pokok)</p>
 </div>
 
 <div class="tip" id="tip" role="tooltip"></div>
@@ -186,25 +186,25 @@ const FACS = [
   { key: "Dirasat",      short: "Dirasat",        name: "Dirasat Islamiah wa al-arabiah", color: "--s5" },
   { key: "Dakwah",       short: "Dakwah",         name: "Dakwah (Pengurusan Dakwah)", color: "--s6" },
 ];
-const ALL = { key: "ALL", short: "รวมทุกคณะ", name: "รวมทุกคณะ/สาขา", color: "--all" };
+const ALL = { key: "ALL", short: "Semua fakulti", name: "Semua fakulti/program", color: "--all" };
 const FAC_BY = Object.fromEntries([...FACS, ALL].map(f => [f.key, f]));
 const YEARS = [2024, 2025, 2026];
 const COHORT = { 2024: 2021, 2025: 2022, 2026: 2023 };
-const yLabel = y => `รุ่น ${COHORT[y]}`;
-const ySub = y => `ปี 4 เทอม 2/${y}`;
+const yLabel = y => `Ambilan ${COHORT[y]}`;
+const ySub = y => `Tahun 4 Sem 2/${y}`;
 const BUCKETS = [
-  { lo: 0,  hi: 0,   label: "ไม่มีวิชาตก" },
-  { lo: 1,  hi: 2,   label: "1–2 วิชา" },
-  { lo: 3,  hi: 5,   label: "3–5 วิชา" },
-  { lo: 6,  hi: 15,  label: "6–15 วิชา" },
-  { lo: 16, hi: 1e9, label: "16 วิชาขึ้นไป" },
+  { lo: 0,  hi: 0,   label: "Tiada madah gagal" },
+  { lo: 1,  hi: 2,   label: "1–2 madah" },
+  { lo: 3,  hi: 5,   label: "3–5 madah" },
+  { lo: 6,  hi: 15,  label: "6–15 madah" },
+  { lo: 16, hi: 1e9, label: "16 madah ke atas" },
 ];
 const METRICS = [
-  { key: "avg",    label: "เฉลี่ยต่อคน", title: "จำนวนวิชาที่ตกเฉลี่ยต่อคน", unit: "วิชา/คน", fmt: v => v.toFixed(2) },
-  { key: "median", label: "ค่ามัธยฐาน", title: "ค่ามัธยฐานจำนวนวิชาที่ตกต่อคน", unit: "วิชา", fmt: v => (Math.round(v * 10) / 10).toString() },
-  { key: "pct",    label: "% ที่มีวิชาตก", title: "สัดส่วนนักศึกษาที่ตกอย่างน้อย 1 วิชา", unit: "%", fmt: v => v.toFixed(1) + "%" },
-  { key: "total",  label: "รวมทั้งรุ่น", title: "จำนวนวิชาที่ตกรวมทั้งรุ่น", unit: "วิชา", fmt: v => v.toLocaleString() },
-  { key: "durAvg", label: "dur เฉลี่ย", title: "dur (دور) เฉลี่ยต่อคน", unit: "ต่อคน", fmt: v => v.toFixed(2) },
+  { key: "avg",    label: "Purata/orang", title: "Purata madah gagal bagi setiap mahasiswa", unit: "madah/orang", fmt: v => v.toFixed(2) },
+  { key: "median", label: "Median", title: "Median madah gagal bagi setiap mahasiswa", unit: "madah", fmt: v => (Math.round(v * 10) / 10).toString() },
+  { key: "pct",    label: "% ada gagal", title: "Peratus mahasiswa yang gagal sekurang-kurangnya 1 madah", unit: "%", fmt: v => v.toFixed(1) + "%" },
+  { key: "total",  label: "Jumlah ambilan", title: "Jumlah madah gagal bagi seluruh ambilan", unit: "madah", fmt: v => v.toLocaleString() },
+  { key: "durAvg", label: "Purata dur", title: "Purata dur (دور) bagi setiap mahasiswa", unit: "seorang", fmt: v => v.toFixed(2) },
 ];
 
 const rows = RAW.map(([fac, year, id, gagal, dur]) => ({ fac, year, id, gagal, dur }));
@@ -294,16 +294,16 @@ function renderTiles() {
   const f = FAC_BY[state.fac], cur = S[f.key][2026], prev = S[f.key][2025];
   const delta = (a, b, fmt, unit) => {
     const d = a - b;
-    if (Math.abs(d) < 1e-9) return `เท่ากับรุ่น ${COHORT[2025]}`;
+    if (Math.abs(d) < 1e-9) return `Sama dengan ambilan ${COHORT[2025]}`;
     const cls = d > 0 ? "up-bad" : "down-good";
     const arrow = d > 0 ? "▲" : "▼";
-    return `<span class="${cls}">${arrow} ${fmt(Math.abs(d))}${unit}</span> เทียบรุ่น ${COHORT[2025]}`;
+    return `<span class="${cls}">${arrow} ${fmt(Math.abs(d))}${unit}</span> berbanding ambilan ${COHORT[2025]}`;
   };
   const tiles = [
-    { lbl: `นักศึกษา รุ่น ${COHORT[2026]}`, val: cur.n.toLocaleString(), unit: "คน", dlt: `รุ่น ${COHORT[2025]}: ${prev.n} คน · รุ่น ${COHORT[2024]}: ${S[f.key][2024].n} คน` },
-    { lbl: `วิชาที่ตกเฉลี่ยต่อคน รุ่น ${COHORT[2026]}`, val: cur.avg.toFixed(2), unit: "วิชา", dlt: delta(cur.avg, prev.avg, v => v.toFixed(2), "") },
-    { lbl: `มีวิชาตกอย่างน้อย 1 วิชา รุ่น ${COHORT[2026]}`, val: cur.pct.toFixed(1) + "%", unit: `(${cur.failN} คน)`, dlt: delta(cur.pct, prev.pct, v => v.toFixed(1), " จุด") },
-    { lbl: `วิชาที่ตกรวม รุ่น ${COHORT[2026]}`, val: cur.total.toLocaleString(), unit: "วิชา", dlt: delta(cur.total, prev.total, v => v.toLocaleString(), "") },
+    { lbl: `Mahasiswa ambilan ${COHORT[2026]}`, val: cur.n.toLocaleString(), unit: "orang", dlt: `Ambilan ${COHORT[2025]}: ${prev.n} orang · Ambilan ${COHORT[2024]}: ${S[f.key][2024].n} orang` },
+    { lbl: `Purata madah gagal/orang, ambilan ${COHORT[2026]}`, val: cur.avg.toFixed(2), unit: "madah", dlt: delta(cur.avg, prev.avg, v => v.toFixed(2), "") },
+    { lbl: `Gagal sekurang-kurangnya 1 madah, ambilan ${COHORT[2026]}`, val: cur.pct.toFixed(1) + "%", unit: `(${cur.failN} orang)`, dlt: delta(cur.pct, prev.pct, v => v.toFixed(1), " mata") },
+    { lbl: `Jumlah madah gagal, ambilan ${COHORT[2026]}`, val: cur.total.toLocaleString(), unit: "madah", dlt: delta(cur.total, prev.total, v => v.toLocaleString(), "") },
   ];
   $("tiles").innerHTML = tiles.map(t => `<div class="tile"><div class="lbl">${t.lbl}</div><div class="val">${t.val} <small>${t.unit}</small></div><div class="dlt">${t.dlt}</div></div>`).join("");
 }
@@ -312,8 +312,8 @@ function renderTiles() {
 function seriesList() { return [...FACS, ALL]; }
 function renderTrend() {
   const m = METRICS.find(x => x.key === state.metric);
-  $("trendTitle").textContent = `แนวโน้ม${m.title}`;
-  $("trendSub").textContent = `แกนนอน = รุ่นนักศึกษา (ปีที่เข้าเรียน) วัดตอนเรียนปี 4 เทอม 2 · คลิกชื่อในคำอธิบายเพื่อซ่อน/แสดงเส้น`;
+  $("trendTitle").textContent = `Trend: ${m.title}`;
+  $("trendSub").textContent = `Paksi mendatar = ambilan mahasiswa (tahun masuk), diukur semasa Tahun 4 Semester 2 · Klik nama dalam petunjuk untuk sembunyi/papar garisan`;
   const leg = $("trendLegend");
   leg.innerHTML = seriesList().map(f => `<button type="button" data-k="${f.key}" class="${state.hidden.has(f.key) ? "dim" : ""}" aria-pressed="${!state.hidden.has(f.key)}"><span class="key-line" style="background:var(${f.color});${f.key === "ALL" ? "height:3px" : ""}"></span>${f.short}</button>`).join("");
   leg.onclick = e => {
@@ -379,7 +379,7 @@ function renderTrend() {
     cross.setAttribute("x1", x(i)); cross.setAttribute("x2", x(i)); cross.setAttribute("visibility", "visible");
     const list = vis.map(f => ({ f, v: S[f.key][yr][m.key], n: S[f.key][yr].n })).sort((a, b) => b.v - a.v);
     showTip(`<div class="th">${yLabel(yr)} · ${ySub(yr)}</div><div style="color:var(--muted);margin-bottom:4px">${m.title}</div>` +
-      list.map(({ f, v, n }) => `<div class="row ${focus !== "ALL" && f.key !== focus && f.key !== "ALL" ? "dim" : ""}"><span class="key-line" style="background:var(${f.color})"></span>${f.short} <span style="color:var(--muted)">(${n} คน)</span><span class="n">${m.fmt(v)}</span></div>`).join(""), evt, host);
+      list.map(({ f, v, n }) => `<div class="row ${focus !== "ALL" && f.key !== focus && f.key !== "ALL" ? "dim" : ""}"><span class="key-line" style="background:var(${f.color})"></span>${f.short} <span style="color:var(--muted)">(${n} orang)</span><span class="n">${m.fmt(v)}</span></div>`).join(""), evt, host);
   };
   ov.addEventListener("pointermove", move);
   ov.addEventListener("pointerdown", move);
@@ -395,7 +395,7 @@ function renderDist() {
   const rowH = 22, gapRow = 8, gapGroup = 18, labW = narrow ? 0 : 150, yrW = 74;
   const groupH = f => (narrow ? 20 : 0) + YEARS.length * rowH + (YEARS.length - 1) * gapRow;
   const H = facs.reduce((s, f) => s + groupH(f) + gapGroup, 0) + 22;
-  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "การกระจายจำนวนวิชาที่ตก" }, host);
+  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Taburan jumlah madah gagal" }, host);
   const x0 = labW + yrW, bw = W - x0 - 4;
   let cy = 0;
   for (const f of facs) {
@@ -403,7 +403,7 @@ function renderDist() {
     else { const t = el("text", { x: 0, y: cy + rowH * 1.5 + gapRow + 4, "font-size": 13, "font-weight": 600, fill: cssv("--ink") }, svg); t.textContent = f.short; }
     YEARS.forEach(yr => {
       const st = S[f.key][yr];
-      const yl = el("text", { x: labW, y: cy + rowH / 2 + 4, "font-size": 12, fill: cssv("--ink-2") }, svg); yl.textContent = `รุ่น ${COHORT[yr]}`;
+      const yl = el("text", { x: labW, y: cy + rowH / 2 + 4, "font-size": 12, fill: cssv("--ink-2") }, svg); yl.textContent = `Ambilan ${COHORT[yr]}`;
       let cx = x0; const usable = bw - 2 * (st.buckets.filter(c => c > 0).length - 1);
       st.buckets.forEach((c, i) => {
         if (!c) return;
@@ -413,8 +413,8 @@ function renderDist() {
         if (w > label.length * 7 + 12) {
           const t = el("text", { x: cx + 6, y: cy + rowH / 2 + 4, "font-size": 11.5, fill: cssv(`--b${i}-ink`), "pointer-events": "none" }, svg); t.textContent = label;
         }
-        const hit = evt => showTip(`<div class="th">${f.short} · รุ่น ${COHORT[yr]}</div><div style="color:var(--muted);margin-bottom:4px">${ySub(yr)} · ทั้งหมด ${st.n} คน</div>` +
-          BUCKETS.map((b, j) => `<div class="row ${j === i ? "" : "dim"}"><span class="key-sq" style="background:var(--b${j})"></span>${b.label}<span class="n">${st.buckets[j]} คน · ${(100 * st.buckets[j] / st.n).toFixed(1)}%</span></div>`).join(""), evt, host);
+        const hit = evt => showTip(`<div class="th">${f.short} · Ambilan ${COHORT[yr]}</div><div style="color:var(--muted);margin-bottom:4px">${ySub(yr)} · jumlah ${st.n} orang</div>` +
+          BUCKETS.map((b, j) => `<div class="row ${j === i ? "" : "dim"}"><span class="key-sq" style="background:var(--b${j})"></span>${b.label}<span class="n">${st.buckets[j]} orang · ${(100 * st.buckets[j] / st.n).toFixed(1)}%</span></div>`).join(""), evt, host);
         r.addEventListener("pointermove", hit); r.addEventListener("pointerdown", hit); r.addEventListener("pointerleave", hideTip);
         cx += w + 2;
       });
@@ -431,18 +431,18 @@ function renderDist() {
 function renderFindings() {
   const out = [];
   const a = S.ALL;
-  out.push(`ภาพรวมทุกคณะ: วิชาที่ตกเฉลี่ยต่อคน <b>${a[2024].avg.toFixed(2)}</b> (รุ่น 2021) → <b>${a[2025].avg.toFixed(2)}</b> (รุ่น 2022) → <b>${a[2026].avg.toFixed(2)}</b> (รุ่น 2023) · สัดส่วนผู้ที่มีวิชาตก ${a[2024].pct.toFixed(1)}% → ${a[2025].pct.toFixed(1)}% → ${a[2026].pct.toFixed(1)}%`);
+  out.push(`Keseluruhan semua fakulti: purata madah gagal/orang <b>${a[2024].avg.toFixed(2)}</b> (ambilan 2021) → <b>${a[2025].avg.toFixed(2)}</b> (ambilan 2022) → <b>${a[2026].avg.toFixed(2)}</b> (ambilan 2023) · peratus mahasiswa yang ada madah gagal ${a[2024].pct.toFixed(1)}% → ${a[2025].pct.toFixed(1)}% → ${a[2026].pct.toFixed(1)}%`);
   const ranked = FACS.map(f => ({ f, v: S[f.key][2026].avg })).sort((p, q) => q.v - p.v);
-  out.push(`รุ่น 2023 (ล่าสุด) ตกเฉลี่ยมากที่สุด: <b>${ranked[0].f.short}</b> ${ranked[0].v.toFixed(2)} วิชา/คน · น้อยที่สุด: <b>${ranked.at(-1).f.short}</b> ${ranked.at(-1).v.toFixed(2)} วิชา/คน`);
+  out.push(`Ambilan 2023 (terkini), purata gagal tertinggi: <b>${ranked[0].f.short}</b> ${ranked[0].v.toFixed(2)} madah/orang · terendah: <b>${ranked.at(-1).f.short}</b> ${ranked.at(-1).v.toFixed(2)} madah/orang`);
   const ch = FACS.map(f => ({ f, d: S[f.key][2026].avg - S[f.key][2025].avg })).sort((p, q) => q.d - p.d);
   const ups = ch.filter(c => c.d > 0.005);
-  if (ups.length) out.push(`เพิ่มขึ้นจากรุ่น 2022 → 2023: ${ups.map(c => `<b>${c.f.short}</b> (+${c.d.toFixed(2)})`).join(", ")}`);
+  if (ups.length) out.push(`Meningkat dari ambilan 2022 → 2023: ${ups.map(c => `<b>${c.f.short}</b> (+${c.d.toFixed(2)})`).join(", ")}`);
   const downs = ch.filter(c => c.d < -0.005).reverse();
-  if (downs.length) out.push(`ลดลงจากรุ่น 2022 → 2023: ${downs.map(c => `<b>${c.f.short}</b> (${c.d.toFixed(2)})`).join(", ")}`);
+  if (downs.length) out.push(`Menurun dari ambilan 2022 → 2023: ${downs.map(c => `<b>${c.f.short}</b> (${c.d.toFixed(2)})`).join(", ")}`);
   const pctUp = FACS.map(f => ({ f, d: S[f.key][2026].pct - S[f.key][2025].pct })).sort((p, q) => q.d - p.d)[0];
-  out.push(`สัดส่วนผู้ที่มีวิชาตกเพิ่มขึ้นมากที่สุดในรุ่น 2023: <b>${pctUp.f.short}</b> ${S[pctUp.f.key][2025].pct.toFixed(1)}% → ${S[pctUp.f.key][2026].pct.toFixed(1)}%`);
+  out.push(`Peratus mahasiswa yang ada madah gagal paling banyak meningkat pada ambilan 2023: <b>${pctUp.f.short}</b> ${S[pctUp.f.key][2025].pct.toFixed(1)}% → ${S[pctUp.f.key][2026].pct.toFixed(1)}%`);
   const heavy = y => rows.filter(r => r.year === y && r.gagal >= 16).length;
-  out.push(`นักศึกษาที่ตก 16 วิชาขึ้นไป: รุ่น 2021 ${heavy(2024)} คน · รุ่น 2022 ${heavy(2025)} คน · รุ่น 2023 ${heavy(2026)} คน — ค่าเฉลี่ยถูกดึงขึ้นโดยกลุ่มที่ตกจำนวนมาก ขณะที่ค่ามัธยฐานรวมทุกคณะคือ ${YEARS.map(y => `${a[y].median} (รุ่น ${COHORT[y]})`).join(", ")} วิชา`);
+  out.push(`Mahasiswa yang gagal 16 madah ke atas: ambilan 2021 ${heavy(2024)} orang · ambilan 2022 ${heavy(2025)} orang · ambilan 2023 ${heavy(2026)} orang — purata ditarik naik oleh kumpulan yang gagal banyak madah, manakala median keseluruhan ialah ${YEARS.map(y => `${a[y].median} (ambilan ${COHORT[y]})`).join(", ")} madah`);
   $("findings").innerHTML = out.map(s => `<li>${s}</li>`).join("");
 }
 
@@ -464,28 +464,28 @@ function renderSummary() {
   }
   data.forEach(d => d.order = d.fo * 10000 + d.y);
   const cols = [
-    { k: "order", t: "คณะ/สาขา", l: 1 }, { k: "y", t: "รุ่น (ปี 4 เทอม 2)", l: 1 }, { k: "n", t: "นักศึกษา" },
-    { k: "total", t: "วิชาตกรวม" }, { k: "avg", t: "เฉลี่ย/คน" }, { k: "median", t: "มัธยฐาน" },
-    { k: "pct", t: "% มีวิชาตก" }, { k: "max", t: "สูงสุด" }, { k: "durTotal", t: "dur รวม" }, { k: "durAvg", t: "dur เฉลี่ย" },
+    { k: "order", t: "Fakulti/Program", l: 1 }, { k: "y", t: "Ambilan (Tahun 4 Sem 2)", l: 1 }, { k: "n", t: "Mahasiswa" },
+    { k: "total", t: "Jumlah gagal" }, { k: "avg", t: "Purata/orang" }, { k: "median", t: "Median" },
+    { k: "pct", t: "% ada gagal" }, { k: "max", t: "Maksimum" }, { k: "durTotal", t: "Jumlah dur" }, { k: "durAvg", t: "Purata dur" },
   ];
   sortable($("sumTable"), cols, data, d => `<tr${d.f.key === "ALL" ? ' style="font-weight:600"' : ""}><td><span class="sw" style="background:var(${d.f.color})"></span>${d.fac}</td><td class="l">${COHORT[d.y]} <span style="color:var(--muted)">(${d.y})</span></td><td>${d.n}</td><td>${d.total.toLocaleString()}</td><td>${d.avg.toFixed(2)}</td><td>${d.median}</td><td>${d.pct.toFixed(1)}%</td><td>${d.max}</td><td>${d.durTotal.toLocaleString()}</td><td>${d.durAvg.toFixed(2)}</td></tr>`, { key: "order", dir: 1 });
 }
 function renderStudents() {
   const list = rows.filter(r => state.fac === "ALL" || r.fac === state.fac).map(r => ({ ...r, fs: FAC_BY[r.fac].short }));
   const withFail = list.filter(r => r.gagal > 0).length;
-  $("stuSub").textContent = `${FAC_BY[state.fac].name} · ${list.length} คน (มีวิชาตก ${withFail} คน) · แสดงเฉพาะรหัสนักศึกษา`;
+  $("stuSub").textContent = `${FAC_BY[state.fac].name} · ${list.length} orang (ada madah gagal: ${withFail} orang) · nombor pokok sahaja`;
   const limit = state.stuAll ? list.length : 25;
   const top = [...list].sort((a, b) => b.gagal - a.gagal || b.dur - a.dur).slice(0, limit);
-  const cols = [{ k: "id", t: "รหัสนักศึกษา", l: 1 }, { k: "fs", t: "คณะ/สาขา", l: 1 }, { k: "year", t: "รุ่น", l: 1 }, { k: "gagal", t: "วิชาที่ตก" }, { k: "dur", t: "dur" }];
+  const cols = [{ k: "id", t: "No. pokok", l: 1 }, { k: "fs", t: "Fakulti/Program", l: 1 }, { k: "year", t: "Ambilan", l: 1 }, { k: "gagal", t: "Madah gagal" }, { k: "dur", t: "dur" }];
   sortable($("stuTable"), cols, top, r => `<tr><td>${r.id}</td><td class="l"><span class="sw" style="background:var(${FAC_BY[r.fac].color})"></span>${r.fs}</td><td class="l">${COHORT[r.year]} <span style="color:var(--muted)">(${r.year})</span></td><td>${r.gagal}</td><td>${r.dur}</td></tr>`, { key: "gagal", dir: -1 });
   const btn = $("stuMore");
-  btn.textContent = state.stuAll ? "แสดงเฉพาะ 25 อันดับแรก" : `แสดงทั้งหมด ${list.length} คน`;
+  btn.textContent = state.stuAll ? "Papar 25 teratas sahaja" : `Papar semua ${list.length} orang`;
   btn.onclick = () => { state.stuAll = !state.stuAll; renderStudents(); };
 }
 
 function renderAll() { renderTiles(); renderTrend(); renderDist(); renderFindings(); renderSummary(); renderStudents(); }
 
-$("meta").textContent = `นักศึกษาทั้งหมด ${rows.length} รายการ จาก 6 คณะ/สาขา × 3 รุ่น · รุ่น 2021 = ปี 4 ในปีการศึกษา 2024, รุ่น 2022 = 2025, รุ่น 2023 = 2026`;
+$("meta").textContent = `Jumlah ${rows.length} rekod mahasiswa daripada 6 fakulti/program × 3 ambilan · Ambilan 2021 = Tahun 4 sesi 2024, ambilan 2022 = 2025, ambilan 2023 = 2026`;
 buildControls();
 renderAll();
 let rz, lastW = $("trendChart").clientWidth;
